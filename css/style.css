@@ -29,6 +29,7 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+html { background: #040A09; }
 html, body {
   width: 100vw;
   height: 100vh;
@@ -60,7 +61,7 @@ html, body {
   display: flex;
   flex-direction: column;
   opacity: 0;
-  transition: opacity 1.8s var(--ease), transform 2s var(--ease);
+  transition: opacity 1.8s var(--ease);
 }
 #stage.ready { opacity: 1; }
 
@@ -210,15 +211,14 @@ html, body {
   vector-effect: non-scaling-stroke;
 }
 .arch-line.thin { stroke-width: 1; opacity: 0.6; }
-.hero-arch .arch-line:not(.thin) { filter: drop-shadow(0 0 0.8rem rgba(201,163,91,0.35)); }
-.hero.is-wait .hero-arch .arch-line:not(.thin) { filter: drop-shadow(0 0 1.4rem rgba(73,191,192,0.55)); }
+.hero-arch .arch-line:not(.thin) { }
+.hero.is-wait .hero-arch .arch-line:not(.thin) { }
 
 .hero-rosette {
   position: absolute; width: 80rem; height: 80rem; left: 50%; top: 50%;
   margin-left: -40rem; margin-top: -36rem;
   opacity: 0.09;
   animation: spin 300s linear infinite;
-  will-change: transform;
 }
 .hero-rosette svg { width: 100%; height: 100%; }
 
@@ -502,8 +502,8 @@ html, body {
 @keyframes breathe { 0%, 100% { opacity: 0.65; } 50% { opacity: 1; } }
 @keyframes shimmer { 0% { left: -20rem; } 60%, 100% { left: 110%; } }
 @keyframes glow {
-  0%, 100% { filter: drop-shadow(0 0 0.6rem rgba(238,217,164,0.25)); }
-  50% { filter: drop-shadow(0 0 2.2rem rgba(238,217,164,0.55)); }
+  0%, 100% { opacity: 0.88; }
+  50% { opacity: 1; }
 }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.78; } }
 @keyframes rise { from { opacity: 0; transform: translateY(2.4rem); } to { opacity: 1; transform: translateY(0); } }
@@ -533,9 +533,9 @@ html, body {
   background: linear-gradient(100deg, var(--gold-deep) 0%, var(--gold) 28%, var(--gold-light) 46%, #FFF4D6 50%, var(--gold-light) 54%, var(--gold) 72%, var(--gold-deep) 100%);
   background-size: 250% 100%;
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-  animation: goldSheen 9s ease-in-out infinite;
+  animation: goldSheen 30s ease-in-out infinite;
 }
-@keyframes goldSheen { 0% { background-position: 100% 0; } 55%, 100% { background-position: 0% 0; } }
+@keyframes goldSheen { 0% { background-position: 100% 0; } 15%, 100% { background-position: 0% 0; } }
 
 .mast-name { font-family: var(--font-display); font-weight: 800; font-size: 5.6rem; line-height: 1.35; letter-spacing: 0; }
 .mast-sub:empty { display: none; }

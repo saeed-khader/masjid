@@ -511,6 +511,9 @@
     var t = Date.now();
     if (t - lastShift < 4 * MIN) return;
     lastShift = t;
+    /* لا نحرك الشاشة وقت تشغيل الصوت حتى لا يومض المشغل */
+    var tile = $('mediaTile');
+    if (tile && tile.className.indexOf('show') > -1) return;
     var x = (Math.random() * 0.8 - 0.4).toFixed(2);
     var y = (Math.random() * 0.8 - 0.4).toFixed(2);
     $('stage').style.transform = 'translate(' + x + 'rem,' + y + 'rem)';
