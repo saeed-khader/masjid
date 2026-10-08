@@ -362,32 +362,65 @@
     return { title: list.title, text: item.text, note: item.note || '', src: item.src || '' };
   }
 
+  /* كل وقت وله خطة: الأقسام تتناوب بالترتيب داخل الخطة */
+  var PLANS = {
+    morningPure: ['morning'],
+    forenoon:    ['morning', 'duha', 'morning', 'hadith'],
+    midday:      ['duas', 'hadith'],
+    eveningPure: ['evening'],
+    maghrib:     ['evening', 'evening', 'hadith'],
+    night:       ['night', 'duas', 'hadith'],
+    lastThird:   ['lastThird', 'duas'],
+    iqamaWait:   ['iqamaWait'],
+    afterPrayer: ['afterPrayer']
+  };
+
   function contextFor(state, W) {
     if (state.phase === 'after') return 'afterPrayer';
-    if (state.phase === 'wait' || state.phase === 'adhan' || state.phase === 'final') return 'iqamaWait';
-    var day = state.day, b = day.byKey;
-    if (W >= b.fajr.at && W < b.dhuhr.at) return 'morning';
-    if (W >= b.asr.at && W < b.isha.at) return 'evening';
-    if (W >= b.isha.at) return 'night';
-    return 'duas';
+    if (state.phase === 'wait' || state.phase === 'adhan' || state.phase === 'final' || state.phase === 'khutbah') return 'iqamaWait';
+    var b = state.day.byKey;
+    if (W < b.fajr.at) {
+      /* بعد منتصف الليل: الثلث الأخير يبدأ من مغرب الأمس + ثلثي الليل */
+      var prevMaghrib = b.maghrib.at - 86400000;
+      var lastThird = prevMaghrib + (b.fajr.at - prevMaghrib) * 2 / 3;
+      return W >= lastThird ? 'lastThird' : 'night';
+    }
+    if (W < b.sunrise.at + 30 * MIN) return 'morningPure';
+    if (W < b.dhuhr.at) return 'forenoon';
+    if (W < b.asr.at) return 'midday';
+    if (W < b.maghrib.at) return 'eveningPure';
+    if (W < b.isha.at) return 'maghrib';
+    return 'night';
   }
 
-  function isFridayTime(state, W) {
-    var day = state.day;
-    if (day.isFriday) return true;
-    // ليلة الجمعة: من مغرب الخميس
-    var d = new Date(W);
-    return d.getUTCDay() === 4 && W >= day.byKey.maghrib.at;
+  /* تذكير مناسب لليلة (صيام الاثنين والخميس، الأيام البيض، الجمعة) */
+  function reminderFor(state, W) {
+    var day = state.day, b = day.byKey;
+    var wd = new Date(W).getUTCDay();
+    var evening = W >= b.maghrib.at;
+    if (day.isFriday && W >= b.asr.at && W < b.maghrib.at) return 'friday';
+    if (day.isFriday || (wd === 4 && evening)) return 'friday';
+    if (evening && (wd === 0 || wd === 3)) return 'fastMonThu';
+    if (evening && day.hijri && day.hijri.d >= 12 && day.hijri.d <= 14) return 'whiteDays';
+    return null;
   }
 
   function pickItem(ctx, state, W) {
     stepCount++;
-    if (ctx === 'afterPrayer') return nextFrom('afterPrayer');
-    if (isFridayTime(state, W) && stepCount % 4 === 0) return nextFrom('friday');
-    if (ctx !== 'iqamaWait' && stepCount % 3 === 0) return nextFrom('hadith');
-    if (ctx === 'night' && stepCount % 2 === 0) return nextFrom('duas');
-    return nextFrom(ctx);
+    var plan = PLANS[ctx] || ['duas'];
+    var pure = ctx === 'morningPure' || ctx === 'eveningPure' || ctx === 'iqamaWait' || ctx === 'afterPrayer';
+    var rem = pure ? null : reminderFor(state, W);
+    if (rem && stepCount % 3 === 0) {
+      var r = nextFrom(rem);
+      if (r && rem === 'fastMonThu') r.note = new Date(W).getUTCDay() === 0 ? 'غدًا الاثنين' : 'غدًا الخميس';
+      return r;
+    }
+    if (lastCtx !== ctx) planStep = 0;
+    var cat = plan[planStep % plan.length];
+    planStep++;
+    return nextFrom(cat);
   }
+  var planStep = 0;
 
   /* تصغير الخط تلقائيًا إذا كان النص طويلًا */
   function fitText(el, box, maxRem, minRem) {
@@ -416,9 +449,8 @@
     var ctx = contextFor(state, W);
     var hold = (C.display.adhkarSeconds || 10) * 1000;
     if (dhikrTimer) clearTimeout(dhikrTimer);
-    lastCtx = ctx;
-
     var item = pickItem(ctx, state, W);
+    lastCtx = ctx;
     if (!item) { dhikrTimer = setTimeout(showDhikr, hold); return; }
     /* النصوص الطويلة مثل آية الكرسي تبقى وقتًا أطول حتى تُقرأ كاملة */
     hold = Math.min(45000, Math.max(hold, item.text.length * 110));
@@ -429,7 +461,7 @@
       setTimeout(function () {
         at.textContent = item.text;
         setText($('afterSrc'), item.src);
-        fitText(at, $('afterBox'), 6.6, 3.8);
+        fitText(at, $('afterBox'), 7.6, 4.4);
         toggle(at, 'out', false);
         runBar($('afterBar'), hold);
       }, force ? 50 : 800);
@@ -441,7 +473,7 @@
         tx.textContent = item.text;
         setText($('dhikrNote'), item.note);
         setText($('dhikrSrc'), item.src);
-        fitText(tx, $('dhikrBox'), 4.6, 3.0);
+        fitText(tx, $('dhikrBox'), 6.2, 3.6);
         toggle(tx, 'out', false); toggle(foot, 'out', false);
         runBar($('dhikrBar'), hold);
       }, force ? 50 : 800);

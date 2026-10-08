@@ -85,7 +85,8 @@ var PrayerTimes = (function () {
     return h * 60 + m;
   }
 
-  /* الأوقات بالدقائق من منتصف الليل */
+  /* الأوقات بالدقائق من منتصف الليل
+     التقريب للأعلى احتياطًا، والشروق للأسفل — نفس المعتمد في التقاويم والتطبيقات */
   function getTimes(y, m, d, isRamadan) {
     var C = window.CONFIG;
     var calc = C.calculation, adj = calc.adjustments || {};
@@ -106,13 +107,13 @@ var PrayerTimes = (function () {
       asrFactor: calc.asrFactor || 1
     });
 
-    out.fajr = Math.round(raw.fajr * 60) + (adj.fajr || 0);
-    out.sunrise = Math.round(raw.sunrise * 60) + (adj.sunrise || 0);
-    out.dhuhr = Math.round(raw.dhuhr * 60) + (adj.dhuhr || 0);
-    out.asr = Math.round(raw.asr * 60) + (adj.asr || 0);
-    out.maghrib = Math.round(raw.maghrib * 60) + (adj.maghrib || 0);
+    out.fajr = Math.ceil(raw.fajr * 60) + (adj.fajr || 0);
+    out.sunrise = Math.floor(raw.sunrise * 60) + (adj.sunrise || 0);
+    out.dhuhr = Math.ceil(raw.dhuhr * 60) + (adj.dhuhr || 0);
+    out.asr = Math.ceil(raw.asr * 60) + (adj.asr || 0);
+    out.maghrib = Math.ceil(raw.maghrib * 60) + (adj.maghrib || 0);
     var ishaGap = isRamadan ? calc.ishaMinutesInRamadan : calc.ishaMinutesAfterMaghrib;
-    out.isha = Math.round(raw.maghrib * 60) + ishaGap + (adj.isha || 0);
+    out.isha = Math.ceil(raw.maghrib * 60) + ishaGap + (adj.isha || 0);
     return out;
   }
 
