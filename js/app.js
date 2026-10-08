@@ -443,6 +443,16 @@
     bar.style.width = '100%';
   }
 
+  /* الآيات تبقى بالتشكيل وخط النسخ، وغيرها بدون تشكيل وبخط واضح */
+  function isQuran(t) { return /^[\s«"]*﴿/.test(t); }
+  function plain(t) { return t.replace(/[\u064B-\u0652\u0670\u0640]/g, ''); }
+  function putText(el, t) {
+    var q = isQuran(t);
+    el.textContent = q ? t : plain(t);
+    el.className = el.className.replace(/\s*is-plain/g, '') + (q ? '' : ' is-plain');
+    return q;
+  }
+
   function showDhikr(force) {
     var W = now();
     var state = resolveState(W);
@@ -459,9 +469,9 @@
       var at = $('afterText');
       toggle(at, 'out', true);
       setTimeout(function () {
-        at.textContent = item.text;
+        var q1 = putText(at, item.text);
         setText($('afterSrc'), item.src);
-        fitText(at, $('afterBox'), 7.6, 4.4);
+        fitText(at, $('afterBox'), q1 ? 7.6 : 7.0, q1 ? 4.4 : 3.6);
         toggle(at, 'out', false);
         runBar($('afterBar'), hold);
       }, force ? 50 : 800);
@@ -470,10 +480,10 @@
       toggle(tx, 'out', true); toggle(foot, 'out', true);
       setTimeout(function () {
         setText($('dhikrTitle'), item.title);
-        tx.textContent = item.text;
+        var q2 = putText(tx, item.text);
         setText($('dhikrNote'), item.note);
         setText($('dhikrSrc'), item.src);
-        fitText(tx, $('dhikrBox'), 6.2, 3.6);
+        fitText(tx, $('dhikrBox'), q2 ? 6.2 : 6.0, q2 ? 3.6 : 3.0);
         toggle(tx, 'out', false); toggle(foot, 'out', false);
         runBar($('dhikrBar'), hold);
       }, force ? 50 : 800);

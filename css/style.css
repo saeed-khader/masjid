@@ -624,3 +624,8 @@ html, body {
 .lite .pc.is-active .pc-arch { animation: none !important; }
 .lite .gold-text, .lite .mast-name { background-position: 50% 0 !important; }
 .media-frame iframe { background: #000; }
+
+/* الأحاديث والأدعية: بدون تشكيل وبخط واضح لكل الناس */
+.dhikr-text.is-plain, .after-text.is-plain {
+  font-family: var(--font-display); font-weight: 500; line-height: 1.75; letter-spacing: 0;
+}

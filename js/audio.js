@@ -14,7 +14,6 @@ var AudioCtl = (function () {
   var MIN = 60000;
   var player = null, ready = false, apiRequested = false;
   var mode = null;                 // 'adhan' | 'quran' | null
-  var qIndex = 0;
   var firedReminder = {}, firedAdhan = {};
   var quranMutedUntil = 0;         // إيقاف التلاوة بالريموت حتى الأذان القادم
   var chime = null;
@@ -59,20 +58,67 @@ var AudioCtl = (function () {
     }
   }
 
-  function playlist() { return (A.quran && A.quran.playlist) || []; }
+  /* القراء: نجمع المقاطع حسب اسم القارئ، ونتناوب بينهم
+     وكل قارئ يكمل من نفس المقطع والثانية اللي وقف عندها */
+  var reciters = null, rIndex = 0, segStart = 0, fading = false;
+  function buildReciters() {
+    var list = (A.quran && A.quran.playlist) || [], map = {}, out = [];
+    for (var i = 0; i < list.length; i++) {
+      var n = list[i].name;
+      if (!map[n]) { map[n] = { name: n, items: [], idx: 0, pos: 0 }; out.push(map[n]); }
+      map[n].items.push(list[i].id);
+    }
+    return out;
+  }
+  function cur() { return reciters[rIndex % reciters.length]; }
 
-  function playQuran() {
-    var list = playlist();
-    if (!ready || !list.length) return;
-    var item = list[qIndex % list.length];
-    mode = 'quran';
-    player.setVolume(A.quran.volume || A.volume || 80);
-    player.loadVideoById({ videoId: item.id });
-    showTile(true, item.name);
+  function savePos() {
+    if (!reciters || mode !== 'quran' || !player || !ready) return;
+    try { cur().pos = Math.max(0, (player.getCurrentTime() || 0) - 2); } catch (e) {}
   }
 
+  function playQuran() {
+    if (!reciters) reciters = buildReciters();
+    if (!ready || !reciters.length) return;
+    var r = cur();
+    mode = 'quran';
+    var vol = A.quran.volume || A.volume || 80;
+    player.setVolume(0);
+    player.loadVideoById({ videoId: r.items[r.idx % r.items.length], startSeconds: r.pos || 0 });
+    fadeTo(vol, 2500);
+    segStart = Date.now();
+    showTile(true, r.name);
+  }
+
+  /* خفض وتعلية الصوت بنعومة */
+  function fadeTo(target, ms, done) {
+    var steps = 15, i = 0, from = 0;
+    try { from = player.getVolume(); } catch (e) {}
+    fading = true;
+    var iv = setInterval(function () {
+      i++;
+      try { player.setVolume(Math.round(from + (target - from) * i / steps)); } catch (e) {}
+      if (i >= steps) { clearInterval(iv); fading = false; if (done) done(); }
+    }, ms / steps);
+  }
+
+  /* انتقال للقارئ التالي بعد مدة التبديل */
+  function rotate() {
+    if (fading || mode !== 'quran') return;
+    savePos();
+    fadeTo(0, 2500, function () {
+      if (mode !== 'quran') return;
+      rIndex++;
+      playQuran();
+    });
+  }
+
+  /* انتهى مقطع القارئ: ننتقل لمقطعه التالي ونبدّل القارئ */
   function nextQuran() {
-    qIndex++;
+    if (!reciters) return;
+    var r = cur();
+    r.idx++; r.pos = 0;
+    rIndex++;
     if (mode === 'quran') playQuran();
   }
 
@@ -86,6 +132,7 @@ var AudioCtl = (function () {
   }
 
   function stopAll() {
+    savePos();
     if (player && ready) { try { player.stopVideo(); } catch (e) {} }
     mode = null;
     showTile(false);
@@ -142,6 +189,7 @@ var AudioCtl = (function () {
                   (nextAdhanAt(state) - W) > (q.stopMinutesBeforeAdhan || 5) * MIN &&
                   W >= quranMutedUntil && inHours(W, q);
     if (allowed && mode === null && ready) playQuran();
+    if (allowed && mode === 'quran' && Date.now() - segStart > (q.switchMinutes || 5) * MIN) rotate();
     if (!allowed && mode === 'quran') stopAll();
 
     // أثناء الإقامة والصلاة: صمت تام
