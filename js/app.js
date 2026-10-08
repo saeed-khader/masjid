@@ -543,6 +543,7 @@
       renderNightDim(state, W);
       antiBurnIn();
       dailyReload(W);
+      if (window.AudioCtl) { try { AudioCtl.update(state, W); } catch (ae) {} }
 
       // تغيير سياق الأذكار فورًا عند تغير الحالة
       var ctx = contextFor(state, W);

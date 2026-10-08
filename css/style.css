@@ -596,3 +596,25 @@ html, body {
 .ov-cd { font-weight: 300; }
 .pray-text { font-family: var(--font-display); font-weight: 400; }
 .ov-inner.after .ov-title { font-size: 10rem; }
+
+/* ---------- مشغل الصوت الصغير ---------- */
+.media-tile {
+  position: absolute; right: 5.6rem; top: 3.6rem; z-index: 15;
+  width: 27.6rem; padding: 1rem 1rem 0.8rem;
+  background: linear-gradient(180deg, rgba(18,40,35,0.97), rgba(7,19,17,0.97));
+  border: 0.15rem solid rgba(205,164,94,0.55);
+  border-radius: 1.4rem;
+  box-shadow: 0 1.2rem 3rem rgba(0,0,0,0.45);
+  opacity: 0; transform: translateY(-1.2rem);
+  transition: opacity 1.2s var(--ease), transform 1.2s var(--ease);
+  pointer-events: none;
+}
+.media-tile.show { opacity: 1; transform: translateY(0); }
+.media-frame { width: 25.6rem; height: 14.4rem; border-radius: 0.8rem; overflow: hidden; background: #000; }
+.media-frame iframe { width: 100% !important; height: 100% !important; display: block; border: 0; }
+.media-cap { display: flex; align-items: center; justify-content: center; margin-top: 0.8rem;
+  font-family: var(--font-display); font-size: 1.9rem; font-weight: 500; color: var(--gold-light); white-space: nowrap; }
+.media-disc { width: 2.8rem; height: 2.8rem; margin-left: 1rem; fill: none; stroke: var(--gold); stroke-width: 2;
+  animation: spin 4s linear infinite; }
+.media-disc path { stroke: var(--gold-light); stroke-width: 3; stroke-linecap: round; }
+.media-tile.is-adhan { border-color: rgba(73,191,192,0.7); }

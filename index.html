@@ -216,6 +216,15 @@
     </div>
   </div>
 
+  <!-- مشغل الصوت: يظهر صغير فقط وقت التلاوة أو الأذان -->
+  <div id="mediaTile" class="media-tile" aria-hidden="true">
+    <div class="media-frame"><div id="ytPlayer"></div></div>
+    <div class="media-cap">
+      <svg class="media-disc" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18"/><circle cx="20" cy="20" r="12"/><circle cx="20" cy="20" r="3.5"/><path d="M20 2 A18 18 0 0 1 38 20"/></svg>
+      <span id="mediaLabel">القرآن الكريم</span>
+    </div>
+  </div>
+
   <!-- تعتيم الليل -->
   <div id="nightDim" class="night-dim"></div>
 
@@ -237,6 +246,7 @@
 <script src="js/config.js"></script>
 <script src="js/adhkar.js"></script>
 <script src="js/prayer-times.js"></script>
+<script src="js/audio.js"></script>
 <script src="js/app.js"></script>
 <script>
   if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
