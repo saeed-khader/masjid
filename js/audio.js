@@ -52,6 +52,11 @@ var AudioCtl = (function () {
   }
 
   function onState(e) {
+    if (e.data === 1 && pendingFade !== null) {   // بدأ التشغيل
+      var v = pendingFade; pendingFade = null;
+      try { player.unMute(); } catch (er) {}
+      fadeTo(v, 2500);
+    }
     if (e.data === 0) {            // انتهى المقطع
       if (mode === 'quran') nextQuran();
       else { mode = null; showTile(false); }
@@ -60,7 +65,7 @@ var AudioCtl = (function () {
 
   /* القراء: نجمع المقاطع حسب اسم القارئ، ونتناوب بينهم
      وكل قارئ يكمل من نفس المقطع والثانية اللي وقف عندها */
-  var reciters = null, rIndex = 0, segStart = 0, fading = false;
+  var reciters = null, rIndex = 0, segStart = 0, fading = false, pendingFade = null;
   function buildReciters() {
     var list = (A.quran && A.quran.playlist) || [], map = {}, out = [];
     for (var i = 0; i < list.length; i++) {
@@ -85,8 +90,8 @@ var AudioCtl = (function () {
     var vol = A.quran.volume || A.volume || 80;
     try { player.unMute(); } catch (e) {}
     player.setVolume(0);
+    pendingFade = vol;            // نبدأ التعلية بعد ما يبدأ التشغيل فعلًا
     player.loadVideoById({ videoId: r.items[r.idx % r.items.length], startSeconds: r.pos || 0 });
-    fadeTo(vol, 2500);
     segStart = Date.now();
     showTile(true, r.name);
   }
@@ -191,7 +196,13 @@ var AudioCtl = (function () {
                   (nextAdhanAt(state) - W) > (q.stopMinutesBeforeAdhan || 5) * MIN &&
                   W >= quranMutedUntil && inHours(W, q);
     if (allowed && mode === null && ready) playQuran();
-    if (mode && ready && !fading) { try { if (player.isMuted()) player.unMute(); } catch (e) {} }
+    if (mode && ready && !fading && pendingFade === null) {
+      try {
+        if (player.isMuted()) player.unMute();
+        var want = mode === 'quran' ? (A.quran.volume || A.volume || 80) : ((A.adhan && A.adhan.volume) || A.volume || 90);
+        if (player.getPlayerState() === 1 && player.getVolume() < want - 5) player.setVolume(want);
+      } catch (e) {}
+    }
     if (allowed && mode === 'quran' && Date.now() - segStart > (q.switchMinutes || 5) * MIN) rotate();
     if (!allowed && mode === 'quran') stopAll();
 
