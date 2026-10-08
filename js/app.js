@@ -599,6 +599,23 @@
   }
   document.addEventListener('visibilitychange', function () { if (!document.hidden) keepAwake(); });
 
+  /* ---------------- تحديث تلقائي ----------------
+     كل ١٠ دقائق يشيك إذا نزلت نسخة جديدة على الموقع، وإذا نزلت يعيد التحميل لحاله */
+  var myVersion = null;
+  function checkUpdate() {
+    if (location.protocol.indexOf('http') !== 0) return;
+    var x = new XMLHttpRequest();
+    x.open('GET', 'version.json?t=' + Date.now(), true);
+    x.onload = function () {
+      try {
+        var v = JSON.parse(x.responseText).v;
+        if (myVersion === null) myVersion = v;
+        else if (v !== myVersion) location.reload();
+      } catch (e) {}
+    };
+    x.send();
+  }
+
   /* ---------------- التشغيل ---------------- */
   function init() {
     applyTheme();
@@ -611,6 +628,8 @@
     buildRow();
     tick();
     keepAwake();
+    checkUpdate();
+    setInterval(checkUpdate, 10 * 60000);
     var start = function () {
       $('stage').className += ' ready';
       showDhikr(true);

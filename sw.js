@@ -1,5 +1,5 @@
 /* تخزين الشاشة داخل الجهاز حتى تعمل بدون إنترنت بعد أول فتح */
-var CACHE = 'prayer-screen-v6';
+var CACHE = 'prayer-screen-v7';
 var FILES = ['./'].concat(['./assets/audio/reminder.wav', './assets/fonts/amiri-arabic-400-normal.woff2', './assets/fonts/amiri-arabic-700-normal.woff2', './assets/fonts/amiri-latin-400-normal.woff2', './assets/fonts/amiri-latin-700-normal.woff2', './assets/fonts/ibm-plex-sans-arabic-arabic-300-normal.woff2', './assets/fonts/ibm-plex-sans-arabic-arabic-500-normal.woff2', './assets/fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2', './assets/fonts/ibm-plex-sans-arabic-latin-300-normal.woff2', './assets/fonts/ibm-plex-sans-arabic-latin-500-normal.woff2', './assets/fonts/ibm-plex-sans-arabic-latin-700-normal.woff2', './assets/fonts/noto-kufi-arabic-arabic-300-normal.woff2', './assets/fonts/noto-kufi-arabic-arabic-400-normal.woff2', './assets/fonts/noto-kufi-arabic-arabic-500-normal.woff2', './assets/fonts/noto-kufi-arabic-arabic-700-normal.woff2', './assets/fonts/noto-kufi-arabic-arabic-800-normal.woff2', './assets/fonts/noto-kufi-arabic-latin-300-normal.woff2', './assets/fonts/noto-kufi-arabic-latin-400-normal.woff2', './assets/fonts/noto-kufi-arabic-latin-500-normal.woff2', './assets/fonts/noto-kufi-arabic-latin-700-normal.woff2', './assets/fonts/noto-kufi-arabic-latin-800-normal.woff2', './css/fonts.css', './css/style.css', './index.html', './js/adhkar.js', './js/app.js', './js/audio.js', './js/config.js', './js/prayer-times.js']);
 
 self.addEventListener('install', function (e) {
@@ -16,7 +16,7 @@ self.addEventListener('activate', function (e) {
 self.addEventListener('fetch', function (e) {
   if (e.request.method !== 'GET') return;
   e.respondWith(
-    fetch(e.request).then(function (res) {
+    fetch(e.request, { cache: 'no-store' }).then(function (res) {
       if (res && res.ok) { var copy = res.clone(); caches.open(CACHE).then(function (c) { c.put(e.request, copy); }); }
       return res;
     }).catch(function () {
