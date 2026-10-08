@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#07101E">
+<title>مواقيت الصلاة</title>
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- تعريفات الرسومات المشتركة -->
+<svg class="defs" width="0" height="0" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" style="stop-color:var(--gold-light)"/>
+      <stop offset="0.55" style="stop-color:var(--gold)"/>
+      <stop offset="1" style="stop-color:var(--gold-deep)"/>
+    </linearGradient>
+    <linearGradient id="gArchFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#16233D" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#08111F" stop-opacity="0.96"/>
+    </linearGradient>
+    <linearGradient id="gArchFillWait" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0F3F31" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#061A16" stop-opacity="0.97"/>
+    </linearGradient>
+    <linearGradient id="gColActive" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" style="stop-color:var(--gold-light)"/>
+      <stop offset="0.6" style="stop-color:var(--gold)"/>
+      <stop offset="1" style="stop-color:var(--gold-deep)"/>
+    </linearGradient>
+    <pattern id="khatam" width="200" height="200" patternUnits="userSpaceOnUse">
+      <g fill="none" style="stroke:var(--gold)" stroke-width="1"><polygon points="100.00,54.00 113.47,67.47 132.53,67.47 132.53,86.53 146.00,100.00 132.53,113.47 132.53,132.53 113.47,132.53 100.00,146.00 86.53,132.53 67.47,132.53 67.47,113.47 54.00,100.00 67.47,86.53 67.47,67.47 86.53,67.47"/><polygon points="0.00,-46.00 13.47,-32.53 32.53,-32.53 32.53,-13.47 46.00,0.00 32.53,13.47 32.53,32.53 13.47,32.53 0.00,46.00 -13.47,32.53 -32.53,32.53 -32.53,13.47 -46.00,0.00 -32.53,-13.47 -32.53,-32.53 -13.47,-32.53"/><polygon points="200.00,-46.00 213.47,-32.53 232.53,-32.53 232.53,-13.47 246.00,0.00 232.53,13.47 232.53,32.53 213.47,32.53 200.00,46.00 186.53,32.53 167.47,32.53 167.47,13.47 154.00,0.00 167.47,-13.47 167.47,-32.53 186.53,-32.53"/><polygon points="0.00,154.00 13.47,167.47 32.53,167.47 32.53,186.53 46.00,200.00 32.53,213.47 32.53,232.53 13.47,232.53 0.00,246.00 -13.47,232.53 -32.53,232.53 -32.53,213.47 -46.00,200.00 -32.53,186.53 -32.53,167.47 -13.47,167.47"/><polygon points="200.00,154.00 213.47,167.47 232.53,167.47 232.53,186.53 246.00,200.00 232.53,213.47 232.53,232.53 213.47,232.53 200.00,246.00 186.53,232.53 167.47,232.53 167.47,213.47 154.00,200.00 167.47,186.53 167.47,167.47 186.53,167.47"/><polygon points="100.00,-26.00 107.62,-18.38 118.38,-18.38 118.38,-7.62 126.00,0.00 118.38,7.62 118.38,18.38 107.62,18.38 100.00,26.00 92.38,18.38 81.62,18.38 81.62,7.62 74.00,0.00 81.62,-7.62 81.62,-18.38 92.38,-18.38"/><polygon points="100.00,174.00 107.62,181.62 118.38,181.62 118.38,192.38 126.00,200.00 118.38,207.62 118.38,218.38 107.62,218.38 100.00,226.00 92.38,218.38 81.62,218.38 81.62,207.62 74.00,200.00 81.62,192.38 81.62,181.62 92.38,181.62"/><polygon points="0.00,74.00 7.62,81.62 18.38,81.62 18.38,92.38 26.00,100.00 18.38,107.62 18.38,118.38 7.62,118.38 0.00,126.00 -7.62,118.38 -18.38,118.38 -18.38,107.62 -26.00,100.00 -18.38,92.38 -18.38,81.62 -7.62,81.62"/><polygon points="200.00,74.00 207.62,81.62 218.38,81.62 218.38,92.38 226.00,100.00 218.38,107.62 218.38,118.38 207.62,118.38 200.00,126.00 192.38,118.38 181.62,118.38 181.62,107.62 174.00,100.00 181.62,92.38 181.62,81.62 192.38,81.62"/><line x1="132.53" y1="67.47" x2="167.47" y2="32.53"/><line x1="132.53" y1="132.53" x2="167.47" y2="167.47"/><line x1="67.47" y1="132.53" x2="32.53" y2="167.47"/><line x1="67.47" y1="67.47" x2="32.53" y2="32.53"/><line x1="100.00" y1="54.00" x2="100.00" y2="26.00"/><line x1="146.00" y1="100.00" x2="174.00" y2="100.00"/><line x1="100.00" y1="146.00" x2="100.00" y2="174.00"/><line x1="54.00" y1="100.00" x2="26.00" y2="100.00"/><line x1="46.00" y1="0.00" x2="74.00" y2="0.00"/><line x1="0.00" y1="46.00" x2="0.00" y2="74.00"/><line x1="154.00" y1="0.00" x2="126.00" y2="0.00"/><line x1="200.00" y1="46.00" x2="200.00" y2="74.00"/><line x1="46.00" y1="200.00" x2="74.00" y2="200.00"/><line x1="0.00" y1="154.00" x2="0.00" y2="126.00"/><line x1="154.00" y1="200.00" x2="126.00" y2="200.00"/><line x1="200.00" y1="154.00" x2="200.00" y2="126.00"/></g>
+    </pattern>
+    <symbol id="star8" viewBox="-50 -50 100 100">
+      <rect x="-32" y="-32" width="64" height="64"/>
+      <rect x="-32" y="-32" width="64" height="64" transform="rotate(45)"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div id="stage">
+
+  <!-- الخلفية -->
+  <div class="bg">
+    <svg class="bg-pattern" width="100%" height="100%" preserveAspectRatio="none" aria-hidden="true">
+      <rect width="100%" height="100%" fill="url(#khatam)"/>
+    </svg>
+    <div class="bg-glow"></div>
+    <div class="bg-vignette"></div>
+  </div>
+
+  <!-- الترويسة -->
+  <header class="mast">
+    <span class="mast-rule"><i></i></span>
+    <div class="mast-center">
+      <svg class="mast-star" aria-hidden="true"><use href="#star8" xlink:href="#star8"/></svg>
+      <h1 id="mosqueName" class="mast-name">جامع</h1>
+      <p id="mosqueSub" class="mast-sub"></p>
+    </div>
+    <span class="mast-rule"><i></i></span>
+  </header>
+
+  <main class="main">
+
+    <!-- الساعة والتاريخ -->
+    <section class="col col-time">
+      <div class="clock" dir="ltr">
+        <span id="clkHM" class="clk-hm">--:--</span>
+        <span class="clk-side">
+          <span id="clkSec" class="clk-sec">--</span>
+          <span id="clkAmPm" class="clk-ampm"></span>
+        </span>
+      </div>
+      <div class="dates">
+        <p id="dayName" class="day-name"></p>
+        <p id="hijriDate" class="hijri"></p>
+        <span class="date-rule"></span>
+        <p id="gregDate" class="greg"></p>
+      </div>
+    </section>
+
+    <!-- الصلاة القادمة داخل محراب -->
+    <section id="hero" class="hero">
+      <div class="hero-rosette" aria-hidden="true">
+        <svg viewBox="-300 -300 600 600">
+          <g fill="none" style="stroke:var(--gold)" stroke-width="1.2">
+            <circle r="290"/><circle r="270"/><circle r="120"/><circle r="60"/>
+            <g id="rosSquares">
+              <rect x="-200" y="-200" width="400" height="400"/>
+              <rect x="-200" y="-200" width="400" height="400" transform="rotate(22.5)"/>
+              <rect x="-200" y="-200" width="400" height="400" transform="rotate(45)"/>
+              <rect x="-200" y="-200" width="400" height="400" transform="rotate(67.5)"/>
+            </g>
+            <rect x="-120" y="-120" width="240" height="240" transform="rotate(22.5)"/>
+            <rect x="-120" y="-120" width="240" height="240" transform="rotate(67.5)"/>
+          </g>
+        </svg>
+      </div>
+      <svg class="hero-arch" viewBox="0 0 660 610" preserveAspectRatio="none" aria-hidden="true">
+        <path class="arch-fill" d="M8,602 L8,250 C8,128 170,70 330,8 C490,70 652,128 652,250 L652,602 Z"/>
+        <path class="arch-line" d="M8,602 L8,250 C8,128 170,70 330,8 C490,70 652,128 652,250 L652,602 Z"/>
+        <path class="arch-line thin" d="M26,584 L26,254 C26,144 180,90 330,28 C480,90 634,144 634,254 L634,584 Z"/>
+      </svg>
+      <div class="hero-body">
+        <p id="heroKicker" class="hero-kicker">الصلاة القادمة</p>
+        <h2 id="heroName" class="hero-name gold-text">—</h2>
+        <p id="heroTime" class="hero-time" dir="rtl"></p>
+        <span class="hero-orn" aria-hidden="true"><i></i><svg><use href="#star8" xlink:href="#star8"/></svg><i></i></span>
+        <p id="heroCdLabel" class="hero-cd-label">متبقي على الأذان</p>
+        <p id="heroCd" class="hero-cd" dir="ltr">--:--</p>
+        <div class="hero-progress"><span id="heroBar"></span></div>
+      </div>
+    </section>
+
+    <!-- الأذكار والأحاديث -->
+    <section class="col col-adhkar">
+      <div class="dhikr-head">
+        <svg class="dhikr-star" aria-hidden="true"><use href="#star8" xlink:href="#star8"/></svg>
+        <p id="dhikrTitle" class="dhikr-title"></p>
+      </div>
+      <div id="dhikrBox" class="dhikr-box">
+        <p id="dhikrText" class="dhikr-text"></p>
+      </div>
+      <div class="dhikr-foot">
+        <p id="dhikrNote" class="dhikr-note"></p>
+        <p id="dhikrSrc" class="dhikr-src"></p>
+      </div>
+      <div class="dhikr-timer"><span id="dhikrBar"></span></div>
+    </section>
+
+  </main>
+
+  <!-- صف المواقيت -->
+  <section id="prayerRow" class="row"></section>
+
+  <!-- ========== الحالات الكاملة ========== -->
+
+  <!-- الأذان -->
+  <div id="ov-adhan" class="ov">
+    <div class="ov-inner">
+      <svg class="ov-arch" viewBox="0 0 1100 900" preserveAspectRatio="none" aria-hidden="true">
+        <path class="arch-line" d="M10,890 L10,360 C10,190 290,110 550,10 C810,110 1090,190 1090,360 L1090,890"/>
+        <path class="arch-line thin" d="M34,890 L34,366 C34,206 300,130 550,36 C800,130 1066,206 1066,366 L1066,890"/>
+      </svg>
+      <p class="ov-kicker">حان الآن موعد أذان</p>
+      <h2 id="ovAdhanName" class="ov-title gold-text">صلاة العصر</h2>
+      <p id="ovAdhanTime" class="ov-time"></p>
+      <span class="hero-orn big" aria-hidden="true"><i></i><svg><use href="#star8" xlink:href="#star8"/></svg><i></i></span>
+      <p class="ov-foot">رَدِّدْ مع المؤذن، ثم صلِّ على النبي ﷺ وسَلِ الله له الوسيلة</p>
+    </div>
+  </div>
+
+  <!-- خطبة الجمعة -->
+  <div id="ov-khutbah" class="ov ov-dim">
+    <div class="ov-inner">
+      <p class="ov-kicker">يوم الجمعة</p>
+      <h2 class="ov-title gold-text">خطبة الجمعة</h2>
+      <span class="hero-orn big" aria-hidden="true"><i></i><svg><use href="#star8" xlink:href="#star8"/></svg><i></i></span>
+      <p class="ov-quote">«إِذَا قُلْتَ لِصَاحِبِكَ يَوْمَ الْجُمُعَةِ: أَنْصِتْ، وَالْإِمَامُ يَخْطُبُ، فَقَدْ لَغَوْتَ»</p>
+      <p class="ov-src">متفق عليه</p>
+    </div>
+  </div>
+
+  <!-- الدقيقة الأخيرة قبل الإقامة -->
+  <div id="ov-final" class="ov ov-wait">
+    <div class="ov-inner">
+      <p id="ovFinalKicker" class="ov-kicker">تبقّى على إقامة صلاة العصر</p>
+      <p id="ovFinalCd" class="ov-cd" dir="ltr">0:60</p>
+      <p class="ov-cd-unit">ثانية</p>
+      <p class="ov-foot strong">استَوُوا واعتدِلوا، وسُدّوا الفُرَج</p>
+      <p class="ov-foot phone">
+        <svg class="ic-phone" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.2"/><line x1="10.5" y1="18.5" x2="13.5" y2="18.5"/><line x1="3" y1="21" x2="21" y2="3"/></svg>
+        فضلًا أغلق هاتفك الجوال
+      </p>
+    </div>
+  </div>
+
+  <!-- الإقامة -->
+  <div id="ov-iqama" class="ov ov-wait">
+    <div class="ov-inner">
+      <svg class="ov-arch" viewBox="0 0 1100 900" preserveAspectRatio="none" aria-hidden="true">
+        <path class="arch-line" d="M10,890 L10,360 C10,190 290,110 550,10 C810,110 1090,190 1090,360 L1090,890"/>
+        <path class="arch-line thin" d="M34,890 L34,366 C34,206 300,130 550,36 C800,130 1066,206 1066,366 L1066,890"/>
+      </svg>
+      <p class="ov-kicker">حان وقت إقامة</p>
+      <h2 id="ovIqamaName" class="ov-title gold-text">صلاة العصر</h2>
+      <span class="hero-orn big" aria-hidden="true"><i></i><svg><use href="#star8" xlink:href="#star8"/></svg><i></i></span>
+      <p class="ov-foot strong">أقيموا صفوفكم وتراصّوا</p>
+    </div>
+  </div>
+
+  <!-- أثناء الصلاة -->
+  <div id="ov-prayer" class="ov ov-black">
+    <div class="ov-inner">
+      <svg class="pray-star" aria-hidden="true"><use href="#star8" xlink:href="#star8"/></svg>
+      <p id="ovPrayerText" class="pray-text">الصلاة قائمة</p>
+      <p id="ovPrayerClock" class="pray-clock" dir="ltr"></p>
+    </div>
+  </div>
+
+  <!-- بعد الصلاة -->
+  <div id="ov-after" class="ov">
+    <div class="ov-inner after">
+      <h2 class="ov-title gold-text">تقبّل الله طاعتكم</h2>
+      <span class="hero-orn big" aria-hidden="true"><i></i><svg><use href="#star8" xlink:href="#star8"/></svg><i></i></span>
+      <p id="afterTitle" class="after-title">أذكار بعد الصلاة</p>
+      <div id="afterBox" class="after-box"><p id="afterText" class="after-text"></p></div>
+      <p id="afterSrc" class="ov-src"></p>
+      <div class="dhikr-timer wide"><span id="afterBar"></span></div>
+    </div>
+  </div>
+
+  <!-- تعتيم الليل -->
+  <div id="nightDim" class="night-dim"></div>
+
+  <!-- شريط وضع التجربة (يظهر فقط عند استخدام ?time= في الرابط) -->
+  <div id="testBadge" class="test-badge"></div>
+</div>
+
+<script>
+  /* لو صار أي خطأ يظهر مكتوب على الشاشة عشان نعرف سببه */
+  window.onerror = function (msg, src, line) {
+    var d = document.getElementById('errBox');
+    if (!d) { d = document.createElement('div'); d.id = 'errBox';
+      d.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:99999;background:#7a1010;color:#fff;font:22px sans-serif;padding:14px;direction:ltr;text-align:left';
+      document.body.appendChild(d); }
+    d.innerHTML += (msg + ' — ' + (src || '').split('/').pop() + ':' + line) + '<br>';
+  };
+  setTimeout(function () { if (typeof CONFIG === 'undefined' && window.onerror) window.onerror('config.js did not load', 'js/config.js', 0); }, 4000);
+</script>
+<script src="js/config.js"></script>
+<script src="js/adhkar.js"></script>
+<script src="js/prayer-times.js"></script>
+<script src="js/app.js"></script>
+<script>
+  if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  }
+</script>
+</body>
+</html>
