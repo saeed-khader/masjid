@@ -618,3 +618,9 @@ html, body {
   animation: spin 4s linear infinite; }
 .media-disc path { stroke: var(--gold-light); stroke-width: 3; stroke-linecap: round; }
 .media-tile.is-adhan { border-color: rgba(73,191,192,0.7); }
+
+/* ---------- وضع خفيف لأجهزة التلفزيون: بدون حركات مستمرة كبيرة ---------- */
+.lite .hero-rosette, .lite .bg-glow, .lite .mast-rule i, .lite .gold-text, .lite .mast-name,
+.lite .pc.is-active .pc-arch { animation: none !important; }
+.lite .gold-text, .lite .mast-name { background-position: 50% 0 !important; }
+.media-frame iframe { background: #000; }

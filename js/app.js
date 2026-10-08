@@ -592,6 +592,7 @@
   /* ---------------- التشغيل ---------------- */
   function init() {
     applyTheme();
+    if (C.display.liteEffects) document.documentElement.className += ' lite';
     fitStage();
     window.addEventListener('resize', fitStage);
     setText($('mosqueName'), C.mosque.name);
