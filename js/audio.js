@@ -83,6 +83,7 @@ var AudioCtl = (function () {
     var r = cur();
     mode = 'quran';
     var vol = A.quran.volume || A.volume || 80;
+    try { player.unMute(); } catch (e) {}
     player.setVolume(0);
     player.loadVideoById({ videoId: r.items[r.idx % r.items.length], startSeconds: r.pos || 0 });
     fadeTo(vol, 2500);
@@ -126,6 +127,7 @@ var AudioCtl = (function () {
     var ad = A.adhan || {};
     if (!ad.enabled || !ad.youtubeId || !ready) return;
     mode = 'adhan';
+    try { player.unMute(); } catch (e) {}
     player.setVolume(ad.volume || A.volume || 90);
     player.loadVideoById({ videoId: ad.youtubeId, startSeconds: ad.start || 0, endSeconds: ad.end || 22 });
     showTile(true, 'أذان ' + (ad.name || 'المسجد الحرام'));
@@ -189,6 +191,7 @@ var AudioCtl = (function () {
                   (nextAdhanAt(state) - W) > (q.stopMinutesBeforeAdhan || 5) * MIN &&
                   W >= quranMutedUntil && inHours(W, q);
     if (allowed && mode === null && ready) playQuran();
+    if (mode && ready && !fading) { try { if (player.isMuted()) player.unMute(); } catch (e) {} }
     if (allowed && mode === 'quran' && Date.now() - segStart > (q.switchMinutes || 5) * MIN) rotate();
     if (!allowed && mode === 'quran') stopAll();
 
@@ -211,7 +214,10 @@ var AudioCtl = (function () {
   function stopByUser() {
     var was = mode;
     if (chime && !chime.paused) { chime.pause(); was = was || 'chime'; }
-    if (!was) return false;
+    if (!was) {
+      if (quranMutedUntil > Date.now()) { quranMutedUntil = 0; return true; }   // ضغطة ثانية ترجّع التلاوة
+      return false;
+    }
     if (was === 'quran' && lastState) quranMutedUntil = nextAdhanAt(lastState);
     stopAll();
     return true;
